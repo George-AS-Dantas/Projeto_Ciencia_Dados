@@ -21,6 +21,13 @@ saldo_final = salario - total_gastos
 print (f'O valor total das despesas é: {total_gastos}')
 print (f'O valor que sobra depois de pagar as contas é: {saldo_final}')
 
-print (f'PAra atingir a meta da reserva de emergencia, levará {reserva_emergenciaMeta} meses')
+print (f'Para atingir a meta da reserva de emergencia, levará {reserva_emergenciaMeta} meses')
 
+#logica de decisão
+if saldo_final < 0:
+    print ("!!!Atenção!!! \nSALDO NEGATIVO, CORTE GASTOS E AUMENTE A RENDA")
+elif saldo_final < salario*0.10:
+    print ("!Cuidado! \nAumente a renda para que tenha sobra do salario")
+else:
+    print ("Parabéns!!\n A saúde financeira está indo bem!")
 
