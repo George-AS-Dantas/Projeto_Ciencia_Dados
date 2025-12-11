@@ -2,19 +2,18 @@ salario = float(input("Digite seu salário: "))
 
 ###Gastos fixos
 gastos = [170, 985, 385, 250]
+gastos_soma = sum(gastos)
 lista_gastos = ['Casa', 'Moto', 'Suhai', 'Reserva']
 
 ###Gastos variaveis
-cartaoCredito = float(input("Digite gasto de cartão: "))
-lazer = float(input("Digite gasto lazer: "))   
+perguntas = ['Cartão', 'Lazer', 'Mercado', 'Gasolina', 'Roupa']  
 
 #Adiciona itens as listas
-gastos.append(cartaoCredito)
-lista_gastos.append("Cartão")
-
-gastos.append(lazer) 
-lista_gastos.append("Lazer")
-
+for item in perguntas:
+    valor = float(input(f"Quanto você gastou com {item}? "))
+    
+    gastos.append(valor)
+    lista_gastos.append(item)
 ###Objetivo reserva de emergencia
 reserva_emergenciaMeta = 10000 / gastos[3]
 
@@ -22,7 +21,7 @@ reserva_emergenciaMeta = 10000 / gastos[3]
 total_gastos = sum(gastos)
 saldo_final = salario - total_gastos
 
-print (f'O valor total das despesas é: {total_gastos}')
+print (f'O valor total das despesas é: {total_gastos}, sendo que {gastos_soma} foram gastos fixos.')
 print (f'O valor que sobra depois de pagar as contas é: {saldo_final}')
 
 print (f'Para atingir a meta da reserva de emergencia, levará {reserva_emergenciaMeta} meses')
