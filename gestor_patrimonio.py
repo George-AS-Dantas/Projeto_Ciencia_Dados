@@ -1,21 +1,25 @@
 salario = float(input("Digite seu salário: "))
 
 ###Gastos fixos
-gasto_casa = 170
-gasto_moto = 985
-gasto_seguroMoto = 385
-reserva_emergencia = 250
-gastos_fixos = gasto_casa + gasto_moto + gasto_seguroMoto + reserva_emergencia
+gastos = [170, 985, 385, 250]
+lista_gastos = ['Casa', 'Moto', 'Suhai', 'Reserva']
+
 ###Gastos variaveis
-gasto_cartaoCredito = float(input("Digite gasto de cartão: "))
-gasto_lazer = float(input("Digite gasto lazer: "))   
-gastos_variaveis =  gasto_cartaoCredito + gasto_lazer
+cartaoCredito = float(input("Digite gasto de cartão: "))
+lazer = float(input("Digite gasto lazer: "))   
+
+#Adiciona itens as listas
+gastos.append(cartaoCredito)
+lista_gastos.append("Cartão")
+
+gastos.append(lazer) 
+lista_gastos.append("Lazer")
 
 ###Objetivo reserva de emergencia
-reserva_emergenciaMeta = 10000 / 250
+reserva_emergenciaMeta = 10000 / gastos[3]
 
 ###Total de gastos e valor que sobra do salario
-total_gastos = gastos_fixos + gastos_variaveis
+total_gastos = sum(gastos)
 saldo_final = salario - total_gastos
 
 print (f'O valor total das despesas é: {total_gastos}')
