@@ -1,6 +1,6 @@
 # 💰 Gestor de Patrimônio
 
-Projeto desenvolvido durante meus estudos de Ciência de Dados com Python.
+Projeto sendo desenvolvido durante meus estudos de Ciência de Dados com Python.
 O objetivo é criar um assistente financeiro que evolui de uma calculadora simples para uma IA de investimentos.
 
 ## 🔨 Funcionalidades
