@@ -15,13 +15,15 @@ continuar = input('Deseja adicionar gasto? [S/N]: ').upper()
 while continuar == 'S':
     item = input('Qual gasto a ser adicionado? (ex. Cartão, delivery, uber, etc.): ')
     valor = float(input(f"Quanto você gastou com {item}?: "))
-    
-    gastos_variaveis.append(valor)
-    nomes_variaveis.append(item)
+
+    if valor > 0:
+      gastos_variaveis.append(valor)
+      nomes_variaveis.append(item)
+    else:
+        print('Valor incorreto!')
 
     continuar = input('Adicionar outro gasto? [S/N]: ').upper()
-    valor_variavel = sum(gastos_variaveis)
-
+valor_variavel = sum(gastos_variaveis)
 ###Objetivo reserva de emergencia
 reserva_emergenciaMeta = 10000 / gastos_fixos[3]
 
