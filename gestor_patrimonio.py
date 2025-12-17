@@ -1,9 +1,11 @@
+import numpy as np
+
 #Menu do programa
 def exibir_menu():
     print("=== Bem vindo ao gestor financeiro! ===\n")
     print("1 - Adicionar gasto")
     print("2 - Relatório de gastos")
-    print("3 - Adicionar renda extra")
+    print("3 - Adicionar renda variavel")
     print("4 - Alterar gastos fixos")
     print("5 - Sair")
     return input('Escolha uma opção: ')
@@ -29,11 +31,13 @@ def ver_relatorio(salario, gastos_fixos, gastos_variaveis):
     total_fixo = 0
     total_variavel = 0
 
-    for item in gastos_fixos:
-        total_fixo = total_fixo + item['valor']
+    valores_fixos = [item['valor'] for item in gastos_fixos]
+    array_fixos = np.array(valores_fixos)
+    total_fixo = np.sum(array_fixos)
 
-    for item in gastos_variaveis:
-        total_variavel = total_variavel + item['valor']
+    valores_varivaeis = [item ['valor'] for item in gastos_variaveis]
+    array_variaveis = np.array(valores_varivaeis)
+    total_variavel = np.sum(array_variaveis)
 
     total_gastos = (total_fixo + total_variavel)
     saldo_final = salario - total_gastos
@@ -43,7 +47,6 @@ def ver_relatorio(salario, gastos_fixos, gastos_variaveis):
 
     print (f'O valor total das despesas é: {total_gastos}')
     print (f'O valor que sobra depois de pagar as contas é: {saldo_final}')
-    print(f'Total Geral: R$ {total_gastos:.2f}\n')
     print (f'Para atingir a meta da reserva de emergencia, levará {reserva_emergencia_meta} meses!\n')
     print(f"Relatório: R$ {total_fixo:.2f} Fixos + R$ {total_variavel:.2f} Variáveis")
     
@@ -58,7 +61,7 @@ def ver_relatorio(salario, gastos_fixos, gastos_variaveis):
 #adiciona renda fixa
 salario = float(input("Digite seu salário: "))
 
-###Gastos fixos
+#Gastos fixos
 gastos_fixos = [
                  {'nome': 'Casa', 'valor': 170},
                  {'nome': 'Moto', 'valor': 985},
@@ -66,9 +69,10 @@ gastos_fixos = [
                  {'nome': 'Reserva', 'valor': 250}
                 ]
 
-###Gastos variaveis
+#Gastos variaveis
 gastos_variaveis = []
 
+#Loop principal
 while True:
     opcao = exibir_menu()
 
