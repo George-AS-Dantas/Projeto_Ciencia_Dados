@@ -35,22 +35,29 @@ def ver_relatorio(salario, gastos_fixos, gastos_variaveis):
     array_fixos = np.array(valores_fixos)
     total_fixo = np.sum(array_fixos)
 
-    valores_varivaeis = [item ['valor'] for item in gastos_variaveis]
-    array_variaveis = np.array(valores_varivaeis)
+    valores_variaveis = [item ['valor'] for item in gastos_variaveis]
+    array_variaveis = np.array(valores_variaveis)
     total_variavel = np.sum(array_variaveis)
 
     total_gastos = (total_fixo + total_variavel)
     saldo_final = salario - total_gastos
 
-###Objetivo reserva de emergencia
+#Objetivo reserva de emergencia
     reserva_emergencia_meta = 10000 / gastos_fixos[3]['valor']
 
+#Alertas
+    alertas = array_variaveis[array_variaveis>300]
+    if len(alertas) > 0:
+        print(f'!!!!!ATENÇÃO!!!!! \nVocê tem {len(alertas)} gasto(s) variável(is) acima de R$ 300.00!')
+
+#Relatorio para o usuário
     print (f'O valor total das despesas é: {total_gastos}')
     print (f'O valor que sobra depois de pagar as contas é: {saldo_final}')
     print (f'Para atingir a meta da reserva de emergencia, levará {reserva_emergencia_meta} meses!\n')
     print(f"Relatório: R$ {total_fixo:.2f} Fixos + R$ {total_variavel:.2f} Variáveis")
     
 #logica de decisão
+
     if saldo_final < 0:
         print ("!!!Atenção!!! \nSALDO NEGATIVO, CORTE GASTOS E AUMENTE A RENDA")
     elif saldo_final < salario*0.10:
