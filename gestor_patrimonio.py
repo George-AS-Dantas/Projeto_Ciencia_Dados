@@ -26,21 +26,45 @@ def adicionar_gastos (gastos_variaveis):
     else:
         print('Valor incorreto! O gasto não foi salvo.')
 
-#Função para soma de gastos e relatório
-def ver_relatorio(salario, gastos_fixos, gastos_variaveis):
-    total_fixo = 0
-    total_variavel = 0
+#Função para adicionar renda extra
+def adicionar_renda_extra(renda_extra):
+    print("\n=== RENDA EXTRA ===\n")
+    item = input('Qual a origem da renda?(Ex. Delivery, vendas, freela): ')
+    valor = float(input(f"Qual valor arrecadado com {item}?: "))
+    
+    if valor > 0:
+        nova_renda = {
+            'nome': item, 
+            'valor': valor
+        }
+        renda_extra.append(nova_renda)
+        print(f"{item} adicionado com sucesso!")
+    else:
+        print('Valor incorreto! A entrada não foi salva.')
 
+#Função para soma de gastos e relatório
+def ver_relatorio(salario, gastos_fixos, gastos_variaveis, renda_extra):
+    total_fixo = 0
+    total_gasto_variavel = 0
+    total_renda_extra = 0
+
+# Cálculo da Renda Extra
+    valores_renda_extra = [item['valor'] for item in renda_extra]
+    array_renda_extra = np.array(valores_renda_extra)
+    total_renda_extra = np.sum(array_renda_extra)
+
+# Cálculo dos Gastos Fixos
     valores_fixos = [item['valor'] for item in gastos_fixos]
     array_fixos = np.array(valores_fixos)
     total_fixo = np.sum(array_fixos)
 
+# Cálculo dos Gastos Variáveis
     valores_variaveis = [item ['valor'] for item in gastos_variaveis]
     array_variaveis = np.array(valores_variaveis)
-    total_variavel = np.sum(array_variaveis)
+    total_gasto_variavel = np.sum(array_variaveis)
 
-    total_gastos = (total_fixo + total_variavel)
-    saldo_final = salario - total_gastos
+    total_gastos = (total_fixo + total_gasto_variavel)
+    saldo_final = salario + total_renda_extra - total_gastos
 
 #Objetivo reserva de emergencia
     reserva_emergencia_meta = 10000 / gastos_fixos[3]['valor']
@@ -54,7 +78,7 @@ def ver_relatorio(salario, gastos_fixos, gastos_variaveis):
     print (f'O valor total das despesas é: {total_gastos}')
     print (f'O valor que sobra depois de pagar as contas é: {saldo_final}')
     print (f'Para atingir a meta da reserva de emergencia, levará {reserva_emergencia_meta} meses!\n')
-    print(f"Relatório: R$ {total_fixo:.2f} Fixos + R$ {total_variavel:.2f} Variáveis")
+    print(f"Relatório: R$ {total_fixo:.2f} Fixos + R$ {total_gasto_variavel:.2f} Variáveis")
     
 #logica de decisão
 
@@ -76,7 +100,8 @@ gastos_fixos = [
                  {'nome': 'Reserva', 'valor': 250}
                 ]
 
-#Gastos variaveis
+#variaveis
+renda_extra = []
 gastos_variaveis = []
 
 #Loop principal
@@ -89,7 +114,10 @@ while True:
 
     #Chama a função de relatório PASSANDO os dados   
     elif opcao == '2':
-        ver_relatorio(salario, gastos_fixos, gastos_variaveis)
+        ver_relatorio(salario, gastos_fixos, gastos_variaveis, renda_extra)
+    
+    elif opcao == '3':
+        adicionar_renda_extra(renda_extra)
     
     #Encerrar o programa
     elif opcao == '5':
