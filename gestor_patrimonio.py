@@ -44,21 +44,23 @@ def adicionar_renda_extra(renda_extra):
 
 #Função para soma de gastos e relatório
 def ver_relatorio(salario, gastos_fixos, gastos_variaveis, renda_extra):
+#Variaveis temporarias
     total_fixo = 0
     total_gasto_variavel = 0
     total_renda_extra = 0
+    valor_da_reserva = 0
 
-# Cálculo da Renda Extra
+#Cálculo da Renda Extra
     valores_renda_extra = [item['valor'] for item in renda_extra]
     array_renda_extra = np.array(valores_renda_extra)
     total_renda_extra = np.sum(array_renda_extra)
 
-# Cálculo dos Gastos Fixos
+#Cálculo dos Gastos Fixos
     valores_fixos = [item['valor'] for item in gastos_fixos]
     array_fixos = np.array(valores_fixos)
     total_fixo = np.sum(array_fixos)
 
-# Cálculo dos Gastos Variáveis
+#Cálculo dos Gastos Variáveis
     valores_variaveis = [item ['valor'] for item in gastos_variaveis]
     array_variaveis = np.array(valores_variaveis)
     total_gasto_variavel = np.sum(array_variaveis)
@@ -66,8 +68,20 @@ def ver_relatorio(salario, gastos_fixos, gastos_variaveis, renda_extra):
     total_gastos = (total_fixo + total_gasto_variavel)
     saldo_final = salario + total_renda_extra - total_gastos
 
+#Reserva de emergencia
+    reserva_emergencia_meta = 0
+#Cálculo reserva de emergencia
+    for item in gastos_fixos:
+     if item['nome'] == 'Reserva':
+        valor_da_reserva = item['valor']
+        break
+     
 #Objetivo reserva de emergencia
-    reserva_emergencia_meta = 10000 / gastos_fixos[3]['valor']
+    if valor_da_reserva > 0:
+        reserva_emergencia_meta = 10000 / valor_da_reserva
+    else:
+        print('Reserva de emergencia inalterada!')
+    
 
 #Alertas
     alertas = array_variaveis[array_variaveis>300]
