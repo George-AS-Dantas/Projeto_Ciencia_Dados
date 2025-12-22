@@ -2,12 +2,13 @@ import numpy as np
 
 #Menu do programa
 def exibir_menu():
-    print("=== Bem vindo ao gestor financeiro! ===\n")
+    print("\n=== Bem vindo ao gestor financeiro! ===\n")
     print("1 - Adicionar gasto")
     print("2 - Relatório de gastos")
     print("3 - Adicionar renda variavel")
-    print("4 - Alterar gastos fixos")
-    print("5 - Sair")
+    print("4 - Consultar gastos fixos")
+    print("5 - Gerenciar gastos fixos")
+    print("6 - Sair")
     return input('Escolha uma opção: ')
 
 #Função para adicionar gastos
@@ -41,6 +42,62 @@ def adicionar_renda_extra(renda_extra):
         print(f"{item} adicionado com sucesso!")
     else:
         print('Valor incorreto! A entrada não foi salva.')
+
+#Função para visualizar indice e gastos fixos
+def listar_gastos_fixos(gastos_fixos):
+    print("\n--- LISTA ATUAL DE GASTOS FIXOS ---")
+
+    for i, gasto in enumerate(gastos_fixos):
+        print(f"{i} - {gasto['nome']}: R$ {gasto['valor']:.2f}")
+
+#Função para alterar os gastos fixos
+def gerenciar_gastos_fixos(gastos_fixos):
+    print("\n=== GESTÃO DE GASTOS FIXOS ===")
+
+    gerenciamento_gastos = input('Deseja alterar, remover, adicionar gastos fixos?\n '
+                            'Para adicionar digite: 1\n'
+                            'Para remover digite: 2\n'
+                            'Para alterar digite: 3\n'
+                            'Para voltar ao menu: 4\n')
+
+#Adicionar
+    if gerenciamento_gastos == '1':
+        listar_gastos_fixos(gastos_fixos)
+
+        item = input('Qual gasto a ser adicionado?\n')
+        valor = float(input('Qual o valor deste gasto?\n'))
+
+        if valor > 0:
+            novo_gasto = {
+            'nome': item, 
+            'valor': valor
+        }
+            gastos_fixos.append(novo_gasto)
+            print(f"{item} adicionado com sucesso!")
+        else:
+            print('Valor incorreto! O gasto não foi salvo.')
+
+#Remover
+    elif gerenciamento_gastos == '2':
+        listar_gastos_fixos(gastos_fixos)
+
+        indice = int(input('Qual numero do gasto fixo que gostaria de remover?\n'))
+        gastos_fixos.pop(indice)
+        print('Gasto removido com sucesso!')
+
+#Alterar
+    elif gerenciamento_gastos == '3':    
+        listar_gastos_fixos(gastos_fixos)
+
+        indice_escolhido = int(input('Qual numero do gasto fixo que de alterar o valor?'))
+        novo_valor = float(input('Digite o novo valor deste gasto: '))
+
+        gastos_fixos[indice_escolhido]['valor'] = novo_valor
+        print(f'{indice_escolhido} alterado com sucesso! Seu novo valor é {novo_valor}')
+
+#Menu
+    elif gerenciamento_gastos == '4':
+        exibir_menu
 
 #Função para soma de gastos e relatório
 def ver_relatorio(salario, gastos_fixos, gastos_variaveis, renda_extra):
@@ -132,9 +189,14 @@ while True:
     
     elif opcao == '3':
         adicionar_renda_extra(renda_extra)
+    elif opcao == '4':
+        listar_gastos_fixos(gastos_fixos)
+
+    elif opcao == '5':
+        gerenciar_gastos_fixos(gastos_fixos)
     
     #Encerrar o programa
-    elif opcao == '5':
+    elif opcao == '6':
         print("Saindo... Até logo!")
         break
         
