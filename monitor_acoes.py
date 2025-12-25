@@ -1,5 +1,6 @@
 import pandas as pd
 import yfinance as yf
+import matplotlib.pyplot as plt
 
 print("=== MONITOR DE AÇÕES v1.0 ===")
 
@@ -48,3 +49,17 @@ print(f"Fechamento Atual: R$ {dia_atual:.2f}")
 filtro_maior_38 = series_fechamento > 38
 dias_filtrados = dados_yahoo[filtro_maior_38]
 print(f"\nDias acima de R$ 38,00: {len(dias_filtrados)}")
+
+#Grafico de evolução de preço
+print("\nGerando gráfico...")
+
+dados_yahoo['Close'].plot(title="Histórico de Preço - PETR4", figsize=(10, 5))
+plt.show()
+
+print("\nGerando Histograma...")
+plt.figure()
+
+dados_yahoo['Close'].hist(bins=30, color='orange')
+plt.title("Distribuição de Preços - Onde a ação passou mais tempo?")
+
+plt.show()
