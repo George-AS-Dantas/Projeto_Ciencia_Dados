@@ -8,7 +8,7 @@ extrato_principal = "extrato.csv"
 
 #Acessa a base de dados caso exista e cria uma se não existir
 if os.path.exists(extrato_principal):
-	df = pd.read_csv(extrato_principal)
+	df_extrato = pd.read_csv(extrato_principal)
 	print("Base de dados carregada!")
 else:
 	extrato_vazio = {
@@ -17,11 +17,11 @@ else:
                      'Valor':[],
                      'Categoria':[] 
                     }
-	df= pd.DataFrame(extrato_vazio)
-	df.to_csv(extrato_principal, index=False)
+	df_extrato = pd.DataFrame(extrato_vazio)
+	df_extrato.to_csv(extrato_principal, index=False)
 	print("Novo banco de dados criado!")
 
-print(df)	
+print(df_extrato)	
 
 #Menu do programa
 def exibir_menu():
@@ -35,9 +35,12 @@ def exibir_menu():
     return input('Escolha uma opção: ')
 
 #Função para adicionar gastos
-def adicionar_gastos (gastos_variaveis):
+def adicionar_gastos ():
     print("\n=== NOVO GASTO ===\n")
+    df_extrato = pd.read_csv(extrato_principal)
     data_hoje = date.today()
+
+#entradas do usuário
     categoria = input('Qual a categoria do gasto? (ex.: Transporte, Alimentação, lazer): ')
     item = input('Qual gasto a ser adicionado? (ex. Pizza, uber, cinema): ')
     valor = float(input(f"Quanto você gastou com {item}?: "))
@@ -48,13 +51,15 @@ def adicionar_gastos (gastos_variaveis):
             'Nome': [item], 
             'Valor': [valor],
             'Categoria': [categoria]}
-        gastos_variaveis.append(novo_gasto)
+        
+        df_novo_gasto = pd.DataFrame(novo_gasto)
+
         print(f"{item} adicionado com sucesso!")
+
     else:
         print('Valor incorreto! O gasto não foi salvo.')
 
-    df_novo_gasto = pd.DataFrame(novo_gasto)
-    extrato_atualizado = pd.concat([df_novo_gasto, df], ignore_index=True)
+    extrato_atualizado = pd.concat([df_extrato, df_novo_gasto], ignore_index=True)
     extrato_atualizado.to_csv(extrato_principal, index=False)
     print("\n--- EXTRATO ATUALIZADO ---")
     print(extrato_atualizado)
@@ -156,7 +161,9 @@ def gerenciar_gastos_fixos(gastos_fixos):
         print("Opção inválida dentro da gestão.")
 
 #Função para soma de gastos e relatório
-def ver_relatorio(salario, gastos_fixos, gastos_variaveis, renda_extra):
+def ver_relatorio(salario, gastos_fixos,renda_extra):
+    df_extrato = pd.read_csv(extrato_principal)
+
 #Variaveis temporarias
     total_fixo = 0
     total_gasto_variavel = 0
@@ -174,10 +181,7 @@ def ver_relatorio(salario, gastos_fixos, gastos_variaveis, renda_extra):
     total_fixo = np.sum(array_fixos)
 
 #Cálculo dos Gastos Variáveis
-    valores_variaveis = [item ['valor'] for item in gastos_variaveis]
-    array_variaveis = np.array(valores_variaveis)
-    total_gasto_variavel = np.sum(array_variaveis)
-
+    total_gasto_variavel = df_extrato['Valor'].sum()
     total_gastos = (total_fixo + total_gasto_variavel)
     saldo_final = salario + total_renda_extra - total_gastos
 
@@ -197,9 +201,9 @@ def ver_relatorio(salario, gastos_fixos, gastos_variaveis, renda_extra):
     
 
 #Alertas
-    alertas = array_variaveis[array_variaveis>300]
-    if len(alertas) > 0:
-        print(f'!!!!!ATENÇÃO!!!!! \nVocê tem {len(alertas)} gasto(s) variável(is) acima de R$ 300.00!')
+    gastos_altos = df_extrato[df_extrato['Valor']>300]
+    if len(gastos_altos) > 0:
+        print(f'!!!!!ATENÇÃO!!!!! \nVocê tem {len(gastos_altos)} gasto(s) variável(is) acima de R$ 300.00!')
 
 #Relatorio para o usuário
     print (f'O valor total das despesas é: {total_gastos}')
@@ -229,7 +233,6 @@ gastos_fixos = [
 
 #variaveis
 renda_extra = []
-gastos_variaveis = []
 
 #Loop principal
 while True:
@@ -237,11 +240,11 @@ while True:
 
     #Chama a função de adicionar
     if opcao == '1':
-        adicionar_gastos(gastos_variaveis)
+        adicionar_gastos()
 
     #Chama a função de relatório PASSANDO os dados   
     elif opcao == '2':
-        ver_relatorio(salario, gastos_fixos, gastos_variaveis, renda_extra)
+        ver_relatorio(salario, gastos_fixos, renda_extra)
     
     elif opcao == '3':
         adicionar_renda_extra(renda_extra)
@@ -251,7 +254,6 @@ while True:
     elif opcao == '5':
         gerenciar_gastos_fixos(gastos_fixos)
     
-    #Encerrar o programa
     elif opcao == '6':
         print("Saindo... Até logo!")
         break
