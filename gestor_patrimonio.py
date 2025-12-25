@@ -1,4 +1,27 @@
 import numpy as np
+import pandas as pd
+import os
+from datetime import date
+
+#Inicio
+extrato_principal = "extrato.csv"
+
+#Acessa a base de dados caso exista e cria uma se não existir
+if os.path.exists(extrato_principal):
+	df = pd.read_csv(extrato_principal)
+	print("Base de dados carregada!")
+else:
+	extrato_vazio = {
+                     'Data':[], 
+                     'Nome':[],
+                     'Valor':[],
+                     'Categoria':[] 
+                    }
+	df= pd.DataFrame(extrato_vazio)
+	df.to_csv(extrato_principal, index=False)
+	print("Novo banco de dados criado!")
+
+print(df)	
 
 #Menu do programa
 def exibir_menu():
@@ -14,18 +37,27 @@ def exibir_menu():
 #Função para adicionar gastos
 def adicionar_gastos (gastos_variaveis):
     print("\n=== NOVO GASTO ===\n")
-    item = input('Qual gasto a ser adicionado? (ex. Cartão, delivery): ')
+    data_hoje = date.today()
+    categoria = input('Qual a categoria do gasto? (ex.: Transporte, Alimentação, lazer): ')
+    item = input('Qual gasto a ser adicionado? (ex. Pizza, uber, cinema): ')
     valor = float(input(f"Quanto você gastou com {item}?: "))
-
+    
     if valor > 0:
         novo_gasto = {
-            'nome': item, 
-            'valor': valor
-        }
+            'Data': [data_hoje],
+            'Nome': [item], 
+            'Valor': [valor],
+            'Categoria': [categoria]}
         gastos_variaveis.append(novo_gasto)
         print(f"{item} adicionado com sucesso!")
     else:
         print('Valor incorreto! O gasto não foi salvo.')
+
+    df_novo_gasto = pd.DataFrame(novo_gasto)
+    extrato_atualizado = pd.concat([df_novo_gasto, df], ignore_index=True)
+    extrato_atualizado.to_csv(extrato_principal, index=False)
+    print("\n--- EXTRATO ATUALIZADO ---")
+    print(extrato_atualizado)
 
 #Função para adicionar renda extra
 def adicionar_renda_extra(renda_extra):
