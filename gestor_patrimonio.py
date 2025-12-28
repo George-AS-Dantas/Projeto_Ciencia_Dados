@@ -5,6 +5,7 @@ from datetime import date
 
 #Inicio
 tabela_gastos = "gastos.csv"
+tabela_entradas = "entradas.csv"
 
 #Acessa a base de dados gastos caso exista e cria uma se não existir
 if os.path.exists(tabela_gastos):
@@ -68,8 +69,6 @@ def adicionar_renda_extra():
     print("\n=== RENDA EXTRA ===\n")
 
 #criando ou acessando banco de entradas
-    tabela_entradas = "entradas.csv"
-
     try: 
         df_entradas = pd.read_csv(tabela_entradas)
         print("Base de entradas carregada!")
@@ -189,26 +188,42 @@ def gerenciar_gastos_fixos(gastos_fixos):
         print("Opção inválida dentro da gestão.")
 
 #Função para soma de gastos e relatório
-def ver_relatorio(salario, gastos_fixos,renda_extra):
-    df_gastos = pd.read_csv(tabela_gastos)
-
+def ver_relatorio(salario, gastos_fixos):
 #Variaveis temporarias
     total_fixo = 0
     total_gasto_variavel = 0
+    renda_extra_manual = 0
     total_renda_extra = 0
     valor_da_reserva = 0
 
+    #acessa as tabelas
+    df_gastos = pd.read_csv(tabela_gastos)
+    
+    #entradas que não são entregas de app
+    try:
+        df_entradas = pd.read_csv(tabela_entradas)
+        renda_extra_manual = df_entradas['Valor'].sum()
+    except:
+        print('Tabela de entradas manual não encontrada. Considerando R$ 0,00.')   
+    #entregas de app
+    try:
+        url_planilha = 'https://docs.google.com/spreadsheets/d/16VXgnu18Hf3D5tX55EHcjguxa7_DCLga1EKXWDzvL5E/export?format=csv'
+        renda_entregas = pd.read_csv(url_planilha, header=2, decimal=',', thousands='.')
+        total_entregas = renda_entregas['Lucro liquido'].sum()
+        print(f"Entregas salvas no sheets: R$ {total_entregas:.2f}")
+    except:
+        total_entregas = 0
+        print('Erro ao acessar planilha, verifique!')
+
 #Cálculo da Renda Extra
-    valores_renda_extra = [item['valor'] for item in renda_extra]
-    array_renda_extra = np.array(valores_renda_extra)
-    total_renda_extra = np.sum(array_renda_extra)
+    total_renda_extra = renda_extra_manual + total_entregas
 
 #Cálculo dos Gastos Fixos
     valores_fixos = [item['valor'] for item in gastos_fixos]
     array_fixos = np.array(valores_fixos)
     total_fixo = np.sum(array_fixos)
 
-#Cálculo dos Gastos Variáveis
+#Cálculo dos Gastos
     total_gasto_variavel = df_gastos['Valor'].sum()
     total_gastos = (total_fixo + total_gasto_variavel)
     saldo_final = salario + total_renda_extra - total_gastos
@@ -235,7 +250,7 @@ def ver_relatorio(salario, gastos_fixos,renda_extra):
 
 #Relatorio para o usuário
     print (f'O valor total das despesas é: {total_gastos}')
-    print (f'O valor que sobra depois de pagar as contas é: {saldo_final}')
+    print (f'O valor que sobra depois de pagar as contas é: {saldo_final:.2f}')
     print (f'Para atingir a meta da reserva de emergencia, levará {reserva_emergencia_meta} meses!\n')
     print(f"Relatório: R$ {total_fixo:.2f} Fixos + R$ {total_gasto_variavel:.2f} Variáveis")
     
