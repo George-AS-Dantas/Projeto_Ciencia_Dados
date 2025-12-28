@@ -4,30 +4,28 @@ import os
 from datetime import date
 
 #Inicio
-extrato_principal = "extrato.csv"
+tabela_gastos = "gastos.csv"
 
-#Acessa a base de dados caso exista e cria uma se não existir
-if os.path.exists(extrato_principal):
-	df_extrato = pd.read_csv(extrato_principal)
-	print("Base de dados carregada!")
+#Acessa a base de dados gastos caso exista e cria uma se não existir
+if os.path.exists(tabela_gastos):
+	df_gastos = pd.read_csv(tabela_gastos)
+	print("Base de gastos carregada!")
 else:
-	extrato_vazio = {
+	gastos_vazio = {
                      'Data':[], 
                      'Nome':[],
                      'Valor':[],
                      'Categoria':[] 
                     }
-	df_extrato = pd.DataFrame(extrato_vazio)
-	df_extrato.to_csv(extrato_principal, index=False)
-	print("Novo banco de dados criado!")
-
-print(df_extrato)	
+	df_gastos = pd.DataFrame(gastos_vazio)
+	df_gastos.to_csv(tabela_gastos, index=False)
+	print("Novo banco de gastos criado!")
 
 #Menu do programa
 def exibir_menu():
     print("\n=== Bem vindo ao gestor financeiro! ===\n")
     print("1 - Adicionar gasto")
-    print("2 - Relatório de gastos")
+    print("2 - Relatório")
     print("3 - Adicionar renda variavel")
     print("4 - Consultar gastos fixos")
     print("5 - Gerenciar gastos fixos")
@@ -37,11 +35,11 @@ def exibir_menu():
 #Função para adicionar gastos
 def adicionar_gastos ():
     print("\n=== NOVO GASTO ===\n")
-    df_extrato = pd.read_csv(extrato_principal)
+    df_gastos = pd.read_csv(tabela_gastos)
     data_hoje = date.today()
 
 #entradas do usuário
-    categoria = input('Qual a categoria do gasto? (ex.: Transporte, Alimentação, lazer): ')
+    categoria = input('Qual a categoria do gasto? (ex.: Transporte, Alimentação, lazer): ').upper()
     item = input('Qual gasto a ser adicionado? (ex. Pizza, uber, cinema): ')
     valor = float(input(f"Quanto você gastou com {item}?: "))
     
@@ -56,27 +54,57 @@ def adicionar_gastos ():
 
         print(f"{item} adicionado com sucesso!")
 
+        gastos_atualizado = pd.concat([df_gastos, df_novo_gasto], ignore_index=True)
+        gastos_atualizado.to_csv(tabela_gastos, index=False)
+        print("\n--- TABELA DE GASTOS ATUALIZADO ---")
+        print(gastos_atualizado)
+
     else:
         print('Valor incorreto! O gasto não foi salvo.')
 
-    extrato_atualizado = pd.concat([df_extrato, df_novo_gasto], ignore_index=True)
-    extrato_atualizado.to_csv(extrato_principal, index=False)
-    print("\n--- EXTRATO ATUALIZADO ---")
-    print(extrato_atualizado)
-
 #Função para adicionar renda extra
-def adicionar_renda_extra(renda_extra):
+def adicionar_renda_extra():
+    data_hoje = date.today()
     print("\n=== RENDA EXTRA ===\n")
-    item = input('Qual a origem da renda?(Ex. Delivery, vendas, freela): ')
+
+#criando ou acessando banco de entradas
+    tabela_entradas = "entradas.csv"
+
+    try: 
+        df_entradas = pd.read_csv(tabela_entradas)
+        print("Base de entradas carregada!")
+    except:
+        entradas_vazio = {
+                     'Data':[], 
+                     'Nome':[],
+                     'Valor':[],
+                     'Origem':[] 
+                    }
+        df_entradas = pd.DataFrame(entradas_vazio)
+        df_entradas.to_csv(tabela_entradas, index=False)
+        print("Novo banco de entradas criado!")
+
+    origem = input('Qual a origem da renda?(Ex. Entregas, vendas, freela): ').upper()
+    item = input('Oque foi feito para adquirir a renda?(Ex. Item vendido, freelance feito, presente recebido): ')
     valor = float(input(f"Qual valor arrecadado com {item}?: "))
     
-    if valor > 0:
+    if origem == 'ENTREGAS':
+        print('Para entradas vindas de entregas, utilize a planilha (Controle de entradas - Entregas)')
+    elif valor > 0:
         nova_renda = {
-            'nome': item, 
-            'valor': valor
+            'Data': [data_hoje],
+            'Nome': [item],
+            'Valor': [valor],
+            'Origem': [origem]
         }
-        renda_extra.append(nova_renda)
-        print(f"{item} adicionado com sucesso!")
+        df_nova_renda = pd.DataFrame(nova_renda)
+        print(f"{origem} adicionado com sucesso!")
+
+        entradas_atualizado = pd.concat([df_entradas, df_nova_renda], ignore_index=True)
+        entradas_atualizado.to_csv(tabela_entradas, index=False)
+        print("\n--- TABELA DE ENTRADAS ATUALIZADO ---")
+        print(entradas_atualizado)
+
     else:
         print('Valor incorreto! A entrada não foi salva.')
 
@@ -162,7 +190,7 @@ def gerenciar_gastos_fixos(gastos_fixos):
 
 #Função para soma de gastos e relatório
 def ver_relatorio(salario, gastos_fixos,renda_extra):
-    df_extrato = pd.read_csv(extrato_principal)
+    df_gastos = pd.read_csv(tabela_gastos)
 
 #Variaveis temporarias
     total_fixo = 0
@@ -181,7 +209,7 @@ def ver_relatorio(salario, gastos_fixos,renda_extra):
     total_fixo = np.sum(array_fixos)
 
 #Cálculo dos Gastos Variáveis
-    total_gasto_variavel = df_extrato['Valor'].sum()
+    total_gasto_variavel = df_gastos['Valor'].sum()
     total_gastos = (total_fixo + total_gasto_variavel)
     saldo_final = salario + total_renda_extra - total_gastos
 
@@ -201,7 +229,7 @@ def ver_relatorio(salario, gastos_fixos,renda_extra):
     
 
 #Alertas
-    gastos_altos = df_extrato[df_extrato['Valor']>300]
+    gastos_altos = df_gastos[df_gastos['Valor']>300]
     if len(gastos_altos) > 0:
         print(f'!!!!!ATENÇÃO!!!!! \nVocê tem {len(gastos_altos)} gasto(s) variável(is) acima de R$ 300.00!')
 
@@ -231,9 +259,6 @@ gastos_fixos = [
                  {'nome': 'Reserva', 'valor': 250}
                 ]
 
-#variaveis
-renda_extra = []
-
 #Loop principal
 while True:
     opcao = exibir_menu()
@@ -244,10 +269,10 @@ while True:
 
     #Chama a função de relatório PASSANDO os dados   
     elif opcao == '2':
-        ver_relatorio(salario, gastos_fixos, renda_extra)
+        ver_relatorio(salario, gastos_fixos)
     
     elif opcao == '3':
-        adicionar_renda_extra(renda_extra)
+        adicionar_renda_extra()
     elif opcao == '4':
         listar_gastos_fixos(gastos_fixos)
 
