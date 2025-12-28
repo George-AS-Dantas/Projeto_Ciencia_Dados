@@ -1,11 +1,39 @@
 import numpy as np
 import pandas as pd
+import json
 import os
 from datetime import date
 
 #Inicio
 tabela_gastos = "gastos.csv"
 tabela_entradas = "entradas.csv"
+arquivo_fixos = "gastos_fixos.json"
+
+#Gastos fixos
+gastos_fixos_padrão = [
+                 {"nome": 'Casa', 'valor': 170},
+                 {'nome': 'Moto', 'valor': 985},
+                 {'nome': 'Suhai', 'valor': 385},
+                 {'nome': 'Reserva', 'valor': 250}
+                ]
+#tenta acessar o json de gastos fixos, e usa o padrão acima caso não consiga
+if os.path.exists(arquivo_fixos):
+    try:
+        with open(arquivo_fixos, "r", encoding='utf8') as arquivo:
+            gastos_fixos = json.load(arquivo)
+        print("Gastos fixos carregados do arquivo com sucesso!")
+    except:
+        # Se o arquivo existir mas estiver corrompido/vazio
+        print("Arquivo corrompido. Recriando padrão...")
+        gastos_fixos = gastos_fixos_padrão
+else: #Caso arquivo não exista
+    gastos_fixos = gastos_fixos_padrão
+
+    with open(arquivo_fixos, "w", encoding='utf8') as arquivo:
+        json.dump(gastos_fixos, arquivo, indent=4)
+    
+    print("Primeira execução: Arquivo criado com seus gastos padrão!")
+#salvar os gastos fixos
 
 #Acessa a base de dados gastos caso exista e cria uma se não existir
 if os.path.exists(tabela_gastos):
@@ -25,13 +53,19 @@ else:
 #Menu do programa
 def exibir_menu():
     print("\n=== Bem vindo ao gestor financeiro! ===\n")
-    print("1 - Adicionar gasto")
+    print("1 - Adicionar gasto variavel")
     print("2 - Relatório")
-    print("3 - Adicionar renda variavel")
+    print("3 - Adicionar renda extra")
     print("4 - Consultar gastos fixos")
     print("5 - Gerenciar gastos fixos")
     print("6 - Sair")
     return input('Escolha uma opção: ')
+
+#salva o json de gastos
+def salvar_alteracoes(lista_atualizada):
+    with open(arquivo_fixos, "w", encoding='utf8') as arquivo:
+        json.dump(lista_atualizada, arquivo, indent=4)
+    print("Dados gravados no arquivo JSON!")
 
 #Função para adicionar gastos
 def adicionar_gastos ():
@@ -127,7 +161,6 @@ def gerenciar_gastos_fixos(gastos_fixos):
 #Adicionar
     if gerenciamento_gastos == '1':
         listar_gastos_fixos(gastos_fixos)
-
         item = input('Qual gasto a ser adicionado?\n')
         valor = float(input('Qual o valor deste gasto?\n'))
 
@@ -137,6 +170,8 @@ def gerenciar_gastos_fixos(gastos_fixos):
             'valor': valor
         }
             gastos_fixos.append(novo_gasto)
+            salvar_alteracoes(gastos_fixos)
+
             print(f"{item} adicionado com sucesso!")
         else:
             print('Valor incorreto! O gasto não foi salvo.')
@@ -148,6 +183,8 @@ def gerenciar_gastos_fixos(gastos_fixos):
         try:
             indice = int(input('Qual numero do gasto fixo que gostaria de remover?\n'))
             gasto_removido = gastos_fixos.pop(indice)
+            salvar_alteracoes(gastos_fixos)
+
             print(f"'{gasto_removido['nome']}' removido com sucesso!")
         
         except ValueError:
@@ -171,6 +208,8 @@ def gerenciar_gastos_fixos(gastos_fixos):
 
             if novo_valor > 0:
                 gastos_fixos[indice_escolhido]['valor'] = novo_valor
+                salvar_alteracoes(gastos_fixos)
+
                 print(f"Sucesso! Valor de '{nome_gasto}' atualizado para R$ {novo_valor:.2f}")
             else:
                 print("Erro: O valor deve ser maior que zero.")
@@ -265,14 +304,6 @@ def ver_relatorio(salario, gastos_fixos):
 
 #adiciona renda fixa
 salario = float(input("Digite seu salário: "))
-
-#Gastos fixos
-gastos_fixos = [
-                 {'nome': 'Casa', 'valor': 170},
-                 {'nome': 'Moto', 'valor': 985},
-                 {'nome': 'Suhai', 'valor': 385},
-                 {'nome': 'Reserva', 'valor': 250}
-                ]
 
 #Loop principal
 while True:
