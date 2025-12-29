@@ -2,6 +2,7 @@ import pandas as pd
 import yfinance as yf
 import matplotlib.pyplot as plt
 
+#Uso para estudo de pandas e matplotlib
 print("=== MONITOR DE AÇÕES v1.0 ===")
 
 #Definir o que vamos buscar
