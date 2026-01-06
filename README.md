@@ -1,12 +1,11 @@
 💰 Gestor de Patrimônio (Em Desenvolvimento)
-
 Projeto prático que está sendo desenvolvido durante minha jornada de estudos em Ciência de Dados. O objetivo é criar um assistente financeiro completo, evoluindo de uma aplicação CLI (Linha de Comando) modular para um Web App com Inteligência Artificial para recomendações de investimento.
 
 🎯 Objetivo
 Aplicar conceitos de Engenharia de Dados, Análise e Desenvolvimento de Software em um problema real: Gestão e Inteligência Financeira.
 
 🔨 Funcionalidades
-✅ Já Implementado (Fase 1)
+✅ Fase 1: Core & Lógica (Concluída)
 Interface via Terminal (CLI): Menu interativo e navegável sem necessidade de reiniciar o script.
 
 Arquitetura Modular: Separação da lógica de negócios em funções reutilizáveis (Clean Code).
@@ -17,31 +16,46 @@ Cálculo de Sobra Mensal: Lógica matemática automática (Renda - Despesas).
 
 Tratamento de Erros: Validação de inputs para impedir quebra do sistema.
 
-🚀 Em Breve / Roadmap
-[ ] Persistência de Dados (ETL): Salvar e ler histórico financeiro em Excel/CSV (Pandas).
+🔄 Fase 3: Engenharia de Dados & SQL (Em Andamento)
+Integração Python-SQL: Criação de scripts de laboratório (lab_sql.py) para manipulação de dados via código.
 
-[ ] Banco de Dados: Migração para SQL para suporte a grandes volumes de dados.
+Modelagem de Dados: Criação de tabelas estruturadas com Tipagem e Auto-incremento (CREATE TABLE, PRIMARY KEY).
 
-[ ] Análise Estatística: Relatórios automáticos de média de gastos e desvios.
+Manipulação de Dados (CRUD): Inserção de dados em lote (executemany) e limpeza de bases (DELETE).
 
-[ ] Visualização de Dados: Dashboards com gráficos de pizza e evolução temporal.
+Consultas Inteligentes: Filtragem avançada de dados financeiros utilizando WHERE, operadores lógicos e busca textual (LIKE).
 
-[ ] Web App: Interface visual acessível pelo navegador.
+Integração com Pandas: Leitura direta de queries SQL transformadas em DataFrames para análise tabular.
 
-[ ] Módulo IA: Previsão de gastos futuros e recomendação de investimentos baseada no perfil.
+🚀 Roadmap
+[x] Lógica de Programação e CLI
 
-🛠️ Tecnologias
-Utilizadas Atualmente
+[🔄] Banco de Dados (SQL): Migração do sistema de arquivos para SQLite (Fase Atual)
+
+[ ] Análise Estatística: Relatórios automáticos de média de gastos e desvios (Agrupamentos/Group By)
+
+[ ] Visualização de Dados: Dashboards com gráficos de pizza e evolução temporal
+
+[ ] Web App: Interface visual acessível pelo navegador (Streamlit)
+
+[ ] Módulo IA: Previsão de gastos futuros e recomendação de investimentos baseada no perfil
+
+🛠️ Tecnologias Utilizadas
+Atualmente:
+
 Python (Lógica, Estruturas de Dados, Modularização)
-VS Code (Ambiente de Desenvolvimento)
-Gemini (Estruturação de roadmap/Assistente)
 
-Planejadas para Próximas Fases
-Análise de Dados: Pandas, NumPy
+SQL / SQLite (Banco de Dados e Persistência)
+
+Pandas (Leitura de Dados e Dataframes)
+
+VS Code (Ambiente de Desenvolvimento)
+
+Gemini (Estruturação de Roadmap e assistente)
+
+Próximos Passos:
 
 Visualização: Matplotlib, Seaborn
-
-Banco de Dados: SQL (SQLite/PostgreSQL)
 
 Web Framework: Streamlit
 
