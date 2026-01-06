@@ -27,13 +27,17 @@ CREATE TABLE IF NOT EXISTS Extrato(
     valor REAL,
     tipo TEXT)""")
 
-#Adiciona dados
-dados_compra = ('2026-01-05', 'Cinema', 50.0, 'Lazer')
-cur.execute("INSERT INTO Extrato (data,descricao,valor,tipo) VALUES (?, ?, ?, ?)", dados_compra)
+cur.execute("DELETE FROM Extrato")
+
+transacoes = [('2024-01-05', 'Salário Mensal', 5000.0, 'Receita'),
+('2024-01-10', 'Cinema com Pipoca', 65.50, 'Lazer'),
+('2024-01-12', 'Uber para Casa', 25.90, 'Transporte'),
+('2024-01-13', 'Mercado Semanal', 450.10, 'Alimentação'),
+('2024-01-15', 'Uber para Trabalho', 18.20, 'Transporte')]
+
+cur.executemany("INSERT INTO Extrato (data,descricao,valor,tipo) VALUES (?, ?, ?, ?)", transacoes)
 con.commit()
 
-#seleciona tudo da tabela utilizando pandas
-df = pd.read_sql("SELECT * FROM Extrato", con)
-
+df = pd.read_sql("SELECT * FROM Extrato WHERE descricao LIKE '%Uber%'", con)
 print(df)
 con.close()
