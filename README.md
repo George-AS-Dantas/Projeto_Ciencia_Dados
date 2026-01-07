@@ -5,6 +5,7 @@ Projeto prático que está sendo desenvolvido durante minha jornada de estudos e
 Aplicar conceitos de Engenharia de Dados, Análise e Desenvolvimento de Software em um problema real: Gestão e Inteligência Financeira.
 
 🔨 Funcionalidades
+
 ✅ Fase 1: Core & Lógica (Concluída)
 Interface via Terminal (CLI): Menu interativo e navegável sem necessidade de reiniciar o script.
 
