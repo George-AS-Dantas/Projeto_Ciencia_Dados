@@ -16,29 +16,38 @@ Cálculo de Sobra Mensal: Lógica matemática automática (Renda - Despesas).
 
 Tratamento de Erros: Validação de inputs para impedir quebra do sistema.
 
+✅ Fase 2: Persistência & Pandas (Concluída)
+Persistência de Arquivos: Sistema de salvamento e leitura de dados em JSON (para configurações e gastos fixos) e CSV (para histórico de movimentações).
+
+Introdução ao Pandas: Substituição de listas nativas por DataFrames para manipulação eficiente de tabelas em memória.
+
+Organização Profissional: Estruturação do projeto em diretórios (src para código, dados para arquivos).
+
 🔄 Fase 3: Engenharia de Dados & SQL (Em Andamento)
-Integração Python-SQL: Criação de scripts de laboratório (lab_sql.py) para manipulação de dados via código.
+Integração Python-SQL: Criação de scripts de laboratório (lab_sql.py) para manipulação de banco de dados via código.
 
-Modelagem de Dados: Criação de tabelas estruturadas com Tipagem e Auto-incremento (CREATE TABLE, PRIMARY KEY).
+Modelagem de Dados: Criação de tabelas relacionais com tipagem forte e chaves primárias automáticas (PRIMARY KEY AUTOINCREMENT).
 
-Manipulação de Dados (CRUD): Inserção de dados em lote (executemany) e limpeza de bases (DELETE).
+Manipulação em Lote (CRUD): Inserção performática de dados (executemany) e rotinas de limpeza (DELETE).
 
-Consultas Inteligentes: Filtragem avançada de dados financeiros utilizando WHERE, operadores lógicos e busca textual (LIKE).
+Consultas Inteligentes: Filtragem avançada de dados financeiros utilizando cláusulas WHERE, operadores lógicos e busca textual (LIKE).
 
-Integração com Pandas: Leitura direta de queries SQL transformadas em DataFrames para análise tabular.
+Integração SQL-Pandas: Leitura direta de queries SQL transformadas em DataFrames para visualização tabular imediata.
 
 🚀 Roadmap
-[x] Lógica de Programação e CLI
+[x] Fase 1: Fundamentos (CLI & Lógica)
 
-[🔄] Banco de Dados (SQL): Migração do sistema de arquivos para SQLite (Fase Atual)
+[x] Fase 2: Persistência & Pandas (CSV/JSON)
 
-[ ] Análise Estatística: Relatórios automáticos de média de gastos e desvios (Agrupamentos/Group By)
+[🔄] Fase 3: Engenharia de Dados (SQL & SQLite) (Fase Atual)
 
-[ ] Visualização de Dados: Dashboards com gráficos de pizza e evolução temporal
+[ ] Fase 4: Análise & Estatística (Agrupamentos e Médias)
 
-[ ] Web App: Interface visual acessível pelo navegador (Streamlit)
+[ ] Fase 5: Visualização de Dados (Dashboards)
 
-[ ] Módulo IA: Previsão de gastos futuros e recomendação de investimentos baseada no perfil
+[ ] Fase 6: Web App (Streamlit)
+
+[ ] Fase 7: Inteligência Artificial (Recomendação de Investimentos)
 
 🛠️ Tecnologias Utilizadas
 Atualmente:
