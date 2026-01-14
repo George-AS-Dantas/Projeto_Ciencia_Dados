@@ -29,15 +29,22 @@ CREATE TABLE IF NOT EXISTS Extrato(
 
 cur.execute("DELETE FROM Extrato")
 
-transacoes = [('2024-01-05', 'Salário Mensal', 5000.0, 'Receita'),
-('2024-01-10', 'Cinema com Pipoca', 65.50, 'Lazer'),
-('2024-01-12', 'Uber para Casa', 25.90, 'Transporte'),
-('2024-01-13', 'Mercado Semanal', 450.10, 'Alimentação'),
-('2024-01-15', 'Uber para Trabalho', 18.20, 'Transporte')]
+transacoes = [
+    ('2024-01-05', 'Salário', 5000.0, 'Receita'),
+    ('2024-01-10', 'Cinema', 50.0, 'Lazer'),
+    ('2024-01-11', 'Barzinho', 80.0, 'Lazer'),
+    ('2024-01-12', 'Uber Ida', 25.0, 'Transporte'),
+    ('2024-01-12', 'Uber Volta', 25.0, 'Transporte'),
+    ('2024-01-13', 'Mercado', 450.0, 'Alimentação'),
+    ('2024-01-15', 'Padaria', 20.0, 'Alimentação'),
+    ('2024-01-15', 'Uber Trabalho', 20.0, 'Transporte')
+]
 
 cur.executemany("INSERT INTO Extrato (data,descricao,valor,tipo) VALUES (?, ?, ?, ?)", transacoes)
 con.commit()
 
-df = pd.read_sql("SELECT * FROM Extrato WHERE descricao LIKE '%Uber%'", con)
+sql = ("SELECT tipo, SUM(valor) FROM Extrato GROUP BY tipo ORDER BY SUM(valor) DESC")
+
+df = pd.read_sql(sql, con)
 print(df)
 con.close()
