@@ -87,5 +87,5 @@ def listar_fixos(lista_fixos):
 
 def menu_gerenciar_fixos():
     print("\n=== GESTÃO DE GASTOS FIXOS ===")
-    print("1 - Adicionar | 2 - Remover | 3 - Alterar | 4 - Voltar")
+    print("1 - Adicionar | 2 - Remover | 3 - Alterar | 4 - Consultar | 5 - Voltar")
     return input("Opção: ")

@@ -43,10 +43,7 @@ while True:
             db.salvar_nova_renda(item, valor, origem)
             print("Renda extra salva!")
 
-    elif opcao == '4': # Consultar Fixos
-        ui.listar_fixos(gastos_fixos)
-
-    elif opcao == '5': # Gerenciar Fixos
+    elif opcao == '4': # Gerenciar Fixos
         sub_opcao = ui.menu_gerenciar_fixos()
         
         if sub_opcao == '1': # Adicionar
@@ -65,7 +62,36 @@ while True:
             except:
                 print("Erro: Índice inválido.")
 
-    elif opcao == '6':
+        elif sub_opcao == '3':
+            ui.listar_fixos(gastos_fixos)
+
+            try:
+                indice = int(ui.ler_valor("Número para alterar: "))
+
+                #Validação de segurança: O índice existe na lista?
+                if 0 <= indice < len(gastos_fixos):
+                    #Pede os novos dados
+                    print(f"Alterando: {gastos_fixos[indice]['nome']}") # Mostra o que está sendo mudado
+                    novo_nome = ui.ler_texto("Novo nome: ")
+                    novo_valor = ui.ler_valor("Novo valor: ")
+                    
+                    #Atualiza a lista na posição específica
+                    gastos_fixos[indice] = {'nome': novo_nome, 'valor': novo_valor}
+                    
+                    #Salva no banco
+                    db.salvar_gastos_fixos(gastos_fixos)
+                    print("Gasto atualizado com sucesso!")
+                    
+                else:
+                    print("Erro: Número não encontrado na lista.")
+                
+            except:
+                print("Erro: Digite um número válido.")
+
+        elif sub_opcao == '4': # Consultar Fixos
+            ui.listar_fixos(gastos_fixos)
+
+    elif opcao == '5':
         print("Saindo...")
         break
     
