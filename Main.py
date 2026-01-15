@@ -3,8 +3,6 @@ from src import interface as ui
 
 #Carregamento Inicial de Dados
 gastos_fixos = db.carregar_gastos_fixos()
-db.inicializar_banco_gastos()
-db.inicializar_banco_entradas()
 
 #Input Inicial
 salario = ui.ler_valor("Digite seu salário mensal: ")

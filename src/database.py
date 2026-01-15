@@ -17,8 +17,6 @@ RAIZ_PROJETO = os.path.dirname(DIRETORIO_ATUAL)
 PASTA_DADOS = os.path.join(RAIZ_PROJETO, "dados")
 
 # Define os caminhos finais
-TABELA_GASTOS = os.path.join(PASTA_DADOS, "gastos_variaveis.csv")
-TABELA_ENTRADAS = os.path.join(PASTA_DADOS, "entradas.csv")
 ARQUIVO_FIXOS = os.path.join(PASTA_DADOS, "gastos_fixos.json")
 CAMINHO_BANCO = os.path.join(PASTA_DADOS, "banco_principal.db")
 
@@ -52,29 +50,6 @@ def salvar_gastos_fixos(lista_atualizada):
     with open(ARQUIVO_FIXOS, "w", encoding='utf8') as arquivo:
         json.dump(lista_atualizada, arquivo, indent=4)
     print("Dados gravados no arquivo JSON!")
-
-def inicializar_banco_gastos():
-    if os.path.exists(TABELA_GASTOS):
-        print("Base de gastos carregada!")
-    else:
-        gastos_vazio = {
-            'Data':[], 'Nome':[], 'Valor':[], 'Categoria':[] 
-        }
-        df_gastos = pd.DataFrame(gastos_vazio)
-        df_gastos.to_csv(TABELA_GASTOS, index=False)
-        print("Novo banco de gastos criado!")
-
-def inicializar_banco_entradas():
-    try: 
-        pd.read_csv(TABELA_ENTRADAS)
-        print("Base de entradas carregada!")
-    except:
-        entradas_vazio = {
-            'Data':[], 'Nome':[], 'Valor':[], 'Origem':[] 
-        }
-        df_entradas = pd.DataFrame(entradas_vazio)
-        df_entradas.to_csv(TABELA_ENTRADAS, index=False)
-        print("Novo banco de entradas criado!")
 
 def salvar_novo_gasto(item, valor, categoria):
     data_hoje = date.today()
