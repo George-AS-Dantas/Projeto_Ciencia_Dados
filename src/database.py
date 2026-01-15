@@ -1,11 +1,11 @@
 import pandas as pd
+import sqlite3
 import json
 import os
 from datetime import date
 import warnings
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
-
 
 # Pega o diretório onde este arquivo (database.py) está
 DIRETORIO_ATUAL = os.path.dirname(os.path.abspath(__file__))
@@ -20,6 +20,8 @@ PASTA_DADOS = os.path.join(RAIZ_PROJETO, "dados")
 TABELA_GASTOS = os.path.join(PASTA_DADOS, "gastos_variaveis.csv")
 TABELA_ENTRADAS = os.path.join(PASTA_DADOS, "entradas.csv")
 ARQUIVO_FIXOS = os.path.join(PASTA_DADOS, "gastos_fixos.json")
+CAMINHO_BANCO = os.path.join(PASTA_DADOS, "banco_principal.db")
+
 
 # --- FUNÇÕES DE GASTOS FIXOS (JSON) ---
 
@@ -51,8 +53,6 @@ def salvar_gastos_fixos(lista_atualizada):
         json.dump(lista_atualizada, arquivo, indent=4)
     print("Dados gravados no arquivo JSON!")
 
-# --- FUNÇÕES DE TRANSAÇÕES (CSV) ---
-
 def inicializar_banco_gastos():
     if os.path.exists(TABELA_GASTOS):
         print("Base de gastos carregada!")
@@ -77,50 +77,48 @@ def inicializar_banco_entradas():
         print("Novo banco de entradas criado!")
 
 def salvar_novo_gasto(item, valor, categoria):
-    df_gastos = pd.read_csv(TABELA_GASTOS)
     data_hoje = date.today()
-    
-    novo_gasto = {
-        'Data': [data_hoje],
-        'Nome': [item], 
-        'Valor': [valor],
-        'Categoria': [categoria]
-    }
-    df_novo_gasto = pd.DataFrame(novo_gasto)
-    gastos_atualizado = pd.concat([df_gastos, df_novo_gasto], ignore_index=True)
-    gastos_atualizado.to_csv(TABELA_GASTOS, index=False)
-    return gastos_atualizado
+
+    con = sqlite3.connect(CAMINHO_BANCO)
+    cur = con.cursor()
+
+    sql_query = ("INSERT INTO gastos (Data, Nome, Valor, Categoria) VALUES (?, ?, ?, ?)")
+    cur.execute(sql_query, (data_hoje, item, valor, categoria))
+
+    con.commit()
+    con.close()
+
+    return ler_todos_gastos()
 
 def salvar_nova_renda(item, valor, origem):
-    # Carrega ou cria
-    try:
-        df_entradas = pd.read_csv(TABELA_ENTRADAS)
-    except:
-        inicializar_banco_entradas()
-        df_entradas = pd.read_csv(TABELA_ENTRADAS)
-
     data_hoje = date.today()
-    nova_renda = {
-        'Data': [data_hoje],
-        'Nome': [item],
-        'Valor': [valor],
-        'Origem': [origem]
-    }
-    df_nova_renda = pd.DataFrame(nova_renda)
-    entradas_atualizado = pd.concat([df_entradas, df_nova_renda], ignore_index=True)
-    entradas_atualizado.to_csv(TABELA_ENTRADAS, index=False)
-    return entradas_atualizado
+
+    con = sqlite3.connect(CAMINHO_BANCO)
+    cur = con.cursor()
+
+    sql_query = ("INSERT INTO entradas (Data, Nome, Valor, Categoria) VALUES (?,?,?,?)")
+    cur.execute(sql_query, (data_hoje, item, valor, origem))
+
+    con.commit()
+    con.close()
+
+    return ler_todas_entradas()
 
 def ler_todos_gastos():
-    return pd.read_csv(TABELA_GASTOS)
+    con = sqlite3.connect(CAMINHO_BANCO)
+    sql_query = ("SELECT * FROM gastos")
+    df = pd.read_sql(sql_query, con)
+    con.close()
+
+    return df
 
 def ler_todas_entradas():
-    try:
-        return pd.read_csv(TABELA_ENTRADAS)
-    except:
-        return pd.DataFrame({'Valor': []}) # Retorna vazio se der erro
-    
-    # Adicione isso no final do database.py
+    con = sqlite3.connect(CAMINHO_BANCO)
+    sql_query = ("SELECT * FROM entradas")
+    df = pd.read_sql(sql_query, con)
+    con.close()
+
+    return df
 
 def buscar_renda_entregas():
     url_planilha = 'https://docs.google.com/spreadsheets/d/16VXgnu18Hf3D5tX55EHcjguxa7_DCLga1EKXWDzvL5E/export?format=csv'
