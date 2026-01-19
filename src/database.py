@@ -51,7 +51,7 @@ def salvar_gastos_fixos(lista_atualizada):
         json.dump(lista_atualizada, arquivo, indent=4)
     print("Dados gravados no arquivo JSON!")
 
-def salvar_novo_gasto(item, valor, categoria):
+def salvar_novo_gasto_variavel(item, valor, categoria):
     data_hoje = date.today()
 
     con = sqlite3.connect(CAMINHO_BANCO)
@@ -65,6 +65,16 @@ def salvar_novo_gasto(item, valor, categoria):
 
     return ler_todos_gastos()
 
+def excluir_gasto_variavel(rowid):
+    con = sqlite3.connect(CAMINHO_BANCO)
+    cur = con.cursor()
+
+    sql_query = ("DELETE FROM gastos WHERE rowid = ?")
+    cur.execute(sql_query, (rowid,))
+
+    con.commit()
+    con.close()
+    
 def salvar_nova_renda(item, valor, origem):
     data_hoje = date.today()
 
@@ -81,7 +91,7 @@ def salvar_nova_renda(item, valor, origem):
 
 def ler_todos_gastos():
     con = sqlite3.connect(CAMINHO_BANCO)
-    sql_query = ("SELECT * FROM gastos")
+    sql_query = ("SELECT rowid, * FROM gastos")
     df = pd.read_sql(sql_query, con)
     con.close()
 
@@ -104,3 +114,4 @@ def buscar_renda_entregas():
     except Exception as e:
         print(f"Erro de conexão com Google Sheets: {e}")
         return 0.0
+    
