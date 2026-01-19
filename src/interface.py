@@ -3,8 +3,8 @@ def exibir_menu_principal():
     print("1 - Adicionar gasto variavel")
     print("2 - Relatório")
     print("3 - Adicionar renda extra")
-    print("4 - Consultar gastos fixos")
     print("5 - Gerenciar gastos fixos")
+    print("5 - Gerenciar Gastos Variáveis")
     print("6 - Sair")
     return input('Escolha uma opção: ')
 
@@ -87,5 +87,10 @@ def listar_fixos(lista_fixos):
 
 def menu_gerenciar_fixos():
     print("\n=== GESTÃO DE GASTOS FIXOS ===")
+    print("1 - Adicionar | 2 - Remover | 3 - Alterar | 4 - Consultar | 5 - Voltar")
+    return input("Opção: ")
+
+def menu_gerenciar_variaveis():
+    print("\n=== GESTÃO DE GASTOS VARIAVEIS ===")
     print("1 - Adicionar | 2 - Remover | 3 - Alterar | 4 - Consultar | 5 - Voltar")
     return input("Opção: ")

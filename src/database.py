@@ -63,7 +63,7 @@ def salvar_novo_gasto_variavel(item, valor, categoria):
     con.commit()
     con.close()
 
-    return ler_todos_gastos()
+    return ler_todos_gastos_variaveis()
 
 def excluir_gasto_variavel(rowid):
     con = sqlite3.connect(CAMINHO_BANCO)
@@ -89,7 +89,7 @@ def salvar_nova_renda(item, valor, origem):
 
     return ler_todas_entradas()
 
-def ler_todos_gastos():
+def ler_todos_gastos_variaveis():
     con = sqlite3.connect(CAMINHO_BANCO)
     sql_query = ("SELECT rowid, * FROM gastos")
     df = pd.read_sql(sql_query, con)

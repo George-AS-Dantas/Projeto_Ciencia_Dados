@@ -14,12 +14,12 @@ while True:
     if opcao == '1': # Adicionar Gasto Variável
         item, valor, categoria = ui.formulario_novo_gasto()
         if valor > 0:
-            db.salvar_novo_gasto(item, valor, categoria)
+            db.salvar_novo_gasto_variavel(item, valor, categoria)
             print("Gasto salvo com sucesso!")
 
     elif opcao == '2': # Relatório
         # pede os dados pro Banco..
-        df_variaveis = db.ler_todos_gastos()
+        df_variaveis = db.ler_todos_gastos_variaveis()
         df_extras = db.ler_todas_entradas()
         valor_entregas = db.buscar_renda_entregas() # Busca do Google Sheets
         
@@ -92,6 +92,21 @@ while True:
             ui.listar_fixos(gastos_fixos)
 
     elif opcao == '5':
+        #Lista os gastos variaveis
+        lista = db.ler_todos_gastos_variaveis()
+        print(lista.to_string(index=False))
+        try:
+            id_digitado = int(input("\nInserida o ID do gasto a ser removido: "))
+            db.excluir_gasto_variavel(id_digitado)
+            print("Item removido!")
+
+        except ValueError:
+            print("Erro: Digite um ID válido")
+
+        except Exception as erro:
+            print(f"Ocorreu um erro inesperado: {erro}")
+
+    elif opcao == '6':
         print("Saindo...")
         break
     
