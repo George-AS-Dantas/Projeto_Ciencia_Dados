@@ -32,52 +32,28 @@ def formulario_nova_renda():
     valor = ler_valor(f"Qual valor arrecadado?: ")
     return item, valor, origem
 
-def mostrar_relatorio_final(fixos, variaveis, entregas, renda_extra_manual, salario):
-    # Lógica de visualização
-    total_fixo = sum([f['valor'] for f in fixos])
-    total_variavel = variaveis['Valor'].sum() if not variaveis.empty else 0
-    
-    total_gastos = total_fixo + total_variavel
-    total_rendas = salario + entregas + renda_extra_manual
-    saldo_final = total_rendas - total_gastos
-    
+def mostrar_relatorio_final(resumo):
 
-    # Lógica da Reserva de Emergência (Recuperada)
-    valor_da_reserva = 0
-    for item in fixos:
-        if item['nome'] == 'Reserva':
-            valor_da_reserva = item['valor']
-            break
-            
-    meses_meta = 0
-    if valor_da_reserva > 0:
-        meses_meta = 10000 / valor_da_reserva
-
-    # --- EXIBIÇÃO ---
     print("\n--- RELATÓRIO FINANCEIRO ---")
-    print(f"Ganhos Totais (Salário + Extras): R$ {total_rendas:.2f}")
-    print(f" - Entregas (App): R$ {entregas:.2f}")
-    print(f" - Renda Extra Manual: R$ {renda_extra_manual:.2f}")
-    print("-" * 30)
-    print(f"Despesas Totais: R$ {total_gastos:.2f}")
-    print(f" - Fixos: R$ {total_fixo:.2f}")
-    print(f" - Variáveis: R$ {total_variavel:.2f}")
-    print("-" * 30)
-    print(f"SALDO FINAL: R$ {saldo_final:.2f}")
+    print(f" - Entregas (App): R$ {resumo['entregas']:.2f}")
+    print(f" - Renda Extra Manual: R$ {resumo['renda_extra_manual']:.2f}")
+    print(f"Ganhos Totais (Salário + Extras): R$ {resumo['total_rendas']:.2f}")
 
-    # Exibe a meta da reserva se ela existir
-    if valor_da_reserva > 0:
-        print(f"\n[META] Aportando R$ {valor_da_reserva:.2f}/mês, você terá R$ 10k em {meses_meta:.1f} meses!")
-    else:
-        print("\n[DICA] Adicione um gasto fixo chamado 'Reserva' para calcular sua meta.")
+    print("-" * 30)
 
-    # Lógica de aviso
-    if saldo_final < 0:
-        print("\n[!!!] ATENÇÃO: SALDO NEGATIVO! CORTE GASTOS!")
-    elif saldo_final < (salario * 0.1):
-        print("\n[!] Cuidado: Você está poupando menos de 10% do salário.")
-    else:
-        print("\n[OK] Parabéns! Saúde financeira estável.")
+    print(f" - Fixos: R$ {resumo['total_gasto_fixo']:.2f}")
+    print(f" - Variáveis: R$ {resumo['total_gasto_variavel']:.2f}")
+    print(f"Despesas Totais: R$ {resumo['total_gastos']:.2f}")
+
+    print("-" * 30)
+
+    print(f"SALDO FINAL: R$ {resumo['saldo_final']:.2f}")
+
+    # mensagem de status de meta da reserva de emergencia
+    print(resumo['mensagem_meta'])
+
+    # mensagem de aviso de saldo
+    print(resumo['aviso_saldo'])
 
 def listar_fixos(lista_fixos):
     print("\n--- GASTOS FIXOS ---")

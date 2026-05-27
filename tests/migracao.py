@@ -22,7 +22,7 @@ CAMINHO_BANCO = os.path.join(PASTA_DADOS, "banco_principal.db")
 
 con = sqlite3.connect(CAMINHO_BANCO)
 
-sql_query = ("SELECT rowid, * FROM gastos")
+sql_query = ("SELECT rowid, *FROM gastos")
 df = pd.read_sql(sql_query, con)
 con.close()
 
