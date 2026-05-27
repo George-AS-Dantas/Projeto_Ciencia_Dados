@@ -65,6 +65,17 @@ def salvar_novo_gasto_variavel(item, valor, categoria):
 
     return ler_todos_gastos_variaveis()
 
+def atualizar_gasto_variavel(item, valor, categoria, rowid):
+    con = sqlite3.connect(CAMINHO_BANCO)
+    cur = con.cursor()
+
+    sql_query = ('UPDATE gastos SET nome = ?, valor = ?, categoria = ? WHERE rowid = ?')
+    cur.execute(sql_query, (item, valor, categoria, rowid))
+
+    con.commit()
+    con.close()
+    
+
 def excluir_gasto_variavel(rowid):
     con = sqlite3.connect(CAMINHO_BANCO)
     cur = con.cursor()

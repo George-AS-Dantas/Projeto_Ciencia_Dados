@@ -1,11 +1,10 @@
 def exibir_menu_principal():
     print("\n=== Bem vindo ao gestor financeiro! ===\n")
-    print("1 - Adicionar gasto variavel")
-    print("2 - Relatório")
-    print("3 - Adicionar renda extra")
-    print("5 - Gerenciar gastos fixos")
-    print("5 - Gerenciar Gastos Variáveis")
-    print("6 - Sair")
+    print("1 - Relatório")
+    print("2 - Adicionar renda extra")
+    print("3 - Gerenciar gastos fixos")
+    print("4 - Gerenciar Gastos Variáveis")
+    print("5 - Sair")
     return input('Escolha uma opção: ')
 
 def ler_valor(mensagem):

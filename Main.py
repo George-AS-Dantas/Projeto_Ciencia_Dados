@@ -11,13 +11,7 @@ salario = ui.ler_valor("Digite seu salário mensal: ")
 while True:
     opcao = ui.exibir_menu_principal()
 
-    if opcao == '1': # Adicionar Gasto Variável
-        item, valor, categoria = ui.formulario_novo_gasto()
-        if valor > 0:
-            db.salvar_novo_gasto_variavel(item, valor, categoria)
-            print("Gasto salvo com sucesso!")
-
-    elif opcao == '2': # Relatório
+    if opcao == '1': # Relatório
         # pede os dados pro Banco..
         df_variaveis = db.ler_todos_gastos_variaveis()
         df_extras = db.ler_todas_entradas()
@@ -35,7 +29,7 @@ while True:
             salario
         )
 
-    elif opcao == '3': # Renda Extra
+    elif opcao == '2': # Renda Extra
         item, valor, origem = ui.formulario_nova_renda()
         if origem == 'ENTREGAS':
             print("Aviso: Entregas devem ser geridas na planilha do Google.")
@@ -43,7 +37,7 @@ while True:
             db.salvar_nova_renda(item, valor, origem)
             print("Renda extra salva!")
 
-    elif opcao == '4': # Gerenciar Fixos
+    elif opcao == '3': # Gerenciar Fixos
         sub_opcao = ui.menu_gerenciar_fixos()
         
         if sub_opcao == '1': # Adicionar
@@ -62,7 +56,7 @@ while True:
             except:
                 print("Erro: Índice inválido.")
 
-        elif sub_opcao == '3':
+        elif sub_opcao == '3': #Alterar
             ui.listar_fixos(gastos_fixos)
 
             try:
@@ -91,22 +85,56 @@ while True:
         elif sub_opcao == '4': # Consultar Fixos
             ui.listar_fixos(gastos_fixos)
 
+    elif opcao == '4': #Gerenciar gastos variaveis0
+        sub_opcao = ui.menu_gerenciar_variaveis()
+
+        if sub_opcao == '1': # Adicionar Gasto Variável
+            item, valor, categoria = ui.formulario_novo_gasto()
+            if valor > 0:
+                db.salvar_novo_gasto_variavel(item, valor, categoria)
+                print("Gasto salvo com sucesso!")
+
+        elif sub_opcao == '2': # Remover
+            try:
+                lista = db.ler_todos_gastos_variaveis()
+                print(lista.to_string(index=False))
+
+                id_digitado = int(input("\nInserida o ID do gasto a ser removido: "))
+                db.excluir_gasto_variavel(id_digitado)
+                print("Item removido!")
+
+            except ValueError:
+                print("Erro: Digite um ID válido")
+
+            except Exception as erro:
+                print(f"Ocorreu um erro inesperado: {erro}")
+
+        elif sub_opcao == '3': # Alterar
+            lista = db.ler_todos_gastos_variaveis()
+            print(lista.to_string(index=False)) 
+
+            try:
+                id_para_alterar = int(input("Digite o ID a ser alterado: "))
+                novo_item, novo_valor, nova_categoria = ui.formulario_novo_gasto()      
+
+                db.atualizar_gasto_variavel(novo_item, novo_valor, nova_categoria, id_para_alterar)
+
+                print("\nGasto atualizado com sucesso!")
+
+            except ValueError:
+                print("Erro: Digite um ID válido") 
+
+            except Exception as erro:
+                print(f"Ocorreu um erro inesperado: {erro}")
+
+        elif sub_opcao == '4': # Visualizar
+            lista = db.ler_todos_gastos_variaveis()
+            print(lista.to_string(index=False))
+
+        elif sub_opcao == '5': # Voltar
+            ui.exibir_menu_principal
+
     elif opcao == '5':
-        #Lista os gastos variaveis
-        lista = db.ler_todos_gastos_variaveis()
-        print(lista.to_string(index=False))
-        try:
-            id_digitado = int(input("\nInserida o ID do gasto a ser removido: "))
-            db.excluir_gasto_variavel(id_digitado)
-            print("Item removido!")
-
-        except ValueError:
-            print("Erro: Digite um ID válido")
-
-        except Exception as erro:
-            print(f"Ocorreu um erro inesperado: {erro}")
-
-    elif opcao == '6':
         print("Saindo...")
         break
     
