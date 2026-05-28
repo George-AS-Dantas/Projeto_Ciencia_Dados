@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 def exibir_menu_principal():
     print("\n=== Bem vindo ao gestor financeiro! ===\n")
     print("1 - Relatório")
@@ -32,7 +34,7 @@ def formulario_nova_renda():
     valor = ler_valor(f"Qual valor arrecadado?: ")
     return item, valor, origem
 
-def mostrar_relatorio_final(resumo, df_categoria):
+def exibir_relatorio(resumo, df_categoria):
 
     print("\n--- RELATÓRIO FINANCEIRO ---")
     print(f" - Entregas (App): R$ {resumo['entregas']:.2f}")
@@ -56,8 +58,17 @@ def mostrar_relatorio_final(resumo, df_categoria):
     print(resumo['aviso_saldo'])
 
     #Relatorio de gasto variaveis por categoria
-    print("--- GASTOS POR CATEGORIA ---")
+    print("\n--- GASTOS POR CATEGORIA ---")
     print(df_categoria)
+
+def mostrar_grafico_pizza(df_categoria):
+
+    valores = df_categoria["Valor"]
+    categorias = df_categoria["Categoria"]
+
+    plt.pie(valores, labels=categorias,autopct='%1.1f%%')
+
+    plt.show()
 
 def listar_fixos(lista_fixos):
     print("\n--- GASTOS FIXOS ---")

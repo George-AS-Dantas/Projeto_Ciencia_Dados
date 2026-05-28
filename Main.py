@@ -20,8 +20,14 @@ while True:
         # Calcula totais simples
         total_extras_manual = df_extras['Valor'].sum() if not df_extras.empty else 0
 
-        resumo = calc.gerar_resumo_financeiro(gastos_fixos, df_variaveis, valor_entregas, total_extras_manual, salario)        # manda a Interface mostrar
-        ui.mostrar_relatorio_final(resumo)
+        #Relatorio de gastos
+        resumo = calc.gerar_resumo_financeiro(gastos_fixos, df_variaveis, valor_entregas, total_extras_manual, salario)
+
+        df_categoria = db.gastos_por_categoria()
+
+        ui.exibir_relatorio(resumo, df_categoria)
+        ui.mostrar_grafico_pizza(df_categoria)
+        
 
     elif opcao == '2': # Renda Extra
         item, valor, origem = ui.formulario_nova_renda()

@@ -51,6 +51,8 @@ def salvar_gastos_fixos(lista_atualizada):
         json.dump(lista_atualizada, arquivo, indent=4)
     print("Dados gravados no arquivo JSON!")
 
+# --- FUNÇÕES DE GASTOS VARIAVEIS (DB) ---
+
 def salvar_novo_gasto_variavel(item, valor, categoria):
     data_hoje = date.today()
 
@@ -75,7 +77,6 @@ def atualizar_gasto_variavel(item, valor, categoria, rowid):
     con.commit()
     con.close()
     
-
 def excluir_gasto_variavel(rowid):
     con = sqlite3.connect(CAMINHO_BANCO)
     cur = con.cursor()
@@ -114,6 +115,8 @@ def gastos_por_categoria ():
     resultado = df.groupby("Categoria")["Valor"].sum().reset_index()
 
     return resultado
+
+# --- FUNÇÕES DE ENTRADAS ---
 
 def ler_todas_entradas():
     con = sqlite3.connect(CAMINHO_BANCO)
