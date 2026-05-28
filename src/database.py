@@ -108,6 +108,13 @@ def ler_todos_gastos_variaveis():
 
     return df
 
+def gastos_por_categoria ():
+    df = ler_todos_gastos_variaveis()
+
+    resultado = df.groupby("Categoria")["Valor"].sum().reset_index()
+
+    return resultado
+
 def ler_todas_entradas():
     con = sqlite3.connect(CAMINHO_BANCO)
     sql_query = ("SELECT * FROM entradas")

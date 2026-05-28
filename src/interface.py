@@ -32,7 +32,7 @@ def formulario_nova_renda():
     valor = ler_valor(f"Qual valor arrecadado?: ")
     return item, valor, origem
 
-def mostrar_relatorio_final(resumo):
+def mostrar_relatorio_final(resumo, df_categoria):
 
     print("\n--- RELATÓRIO FINANCEIRO ---")
     print(f" - Entregas (App): R$ {resumo['entregas']:.2f}")
@@ -54,6 +54,10 @@ def mostrar_relatorio_final(resumo):
 
     # mensagem de aviso de saldo
     print(resumo['aviso_saldo'])
+
+    #Relatorio de gasto variaveis por categoria
+    print("--- GASTOS POR CATEGORIA ---")
+    print(df_categoria)
 
 def listar_fixos(lista_fixos):
     print("\n--- GASTOS FIXOS ---")
