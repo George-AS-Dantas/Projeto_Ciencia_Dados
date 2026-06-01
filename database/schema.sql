@@ -1,5 +1,18 @@
+-- Tabela responsável por armazenar categorias financeiras
 CREATE TABLE categorias (
     id SERIAL PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    tipo VARCHAR(10) NOT NULL
+    nome VARCHAR(100) NOT NULL, -- Nome da categoria (ex: MERCADO, SALARIO)
+    tipo VARCHAR(10) NOT NULL -- ENTRADA ou SAIDA
+);
+
+-- Tabela responsável por armazenar transações
+CREATE TABLE transacoes (
+  id SERIAL PRIMARY KEY,
+  data DATE NOT NULL,
+  tipo VARCHAR(10) NOT NULL, -- ENTRADA ou SAIDA
+  sub_tipo VARCHAR(8) NOT NULL, -- FIXO ou VARIAVEL
+  descricao VARCHAR(50) NOT NULL, -- Descrição da transação (EX. Uber, fastfood, conta de luz)
+  valor NUMERIC (10,2) NOT NULL,
+  categoria_id INTEGER NOT NULL,
+  FOREIGN KEY (categoria_id) REFERENCES categorias(id)
 );
