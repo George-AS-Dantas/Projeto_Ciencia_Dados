@@ -21,3 +21,9 @@ CREATE TABLE transacoes (
 INSERT INTO transacoes (data, tipo, sub_tipo, descricao, valor, categoria_id)
 VALUES ('2026-06-08', 'ENTRADA', 'FIXO', 'SALARIO DO MÊS', 2050, 1);
 SELECT * FROM transacoes
+
+--exibe nome da categoria ao invés do ID
+SELECT transacoes.data, transacoes.descricao, transacoes.valor, transacoes.tipo, categorias.nome
+FROM transacoes
+INNER JOIN categorias
+ON transacoes.categoria_id = categorias.id
