@@ -16,3 +16,8 @@ CREATE TABLE transacoes (
   categoria_id INTEGER NOT NULL,
   FOREIGN KEY (categoria_id) REFERENCES categorias(id)
 );
+
+--Inserir primeira transaçao
+INSERT INTO transacoes (data, tipo, sub_tipo, descricao, valor, categoria_id)
+VALUES ('2026-06-08', 'ENTRADA', 'FIXO', 'SALARIO DO MÊS', 2050, 1);
+SELECT * FROM transacoes
